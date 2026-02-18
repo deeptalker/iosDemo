@@ -1,0 +1,61 @@
+name: Build iOS Demo for iPhone 17 Pro Simulator
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-ios-simulator:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify Xcode version
+        run: |
+          ls /Applications | grep Xcode
+          sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+          xcodebuild -version
+          xcrun simctl list devices
+
+      - name: Build for iPhone 17 Pro Simulator (arm64)
+        run: |
+          PROJECT_NAME="iosDemo"
+          SCHEME_NAME="iosDemo"
+          BUILD_DIR="./build"
+          
+          mkdir -p $BUILD_DIR
+          
+          xcodebuild \
+            -scheme $SCHEME_NAME \
+            -project $PROJECT_NAME.xcodeproj \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            ONLY_ACTIVE_ARCH=NO \
+            ARCHS=arm64 \
+            VALID_ARCHS=arm64 \
+            build \
+            SYMROOT=$BUILD_DIR \
+            OBJROOT=$BUILD_DIR \
+            -quiet
+
+          APP_PATH="$BUILD_DIR/Debug-iphonesimulator/$PROJECT_NAME.app"
+          if [ ! -d "$APP_PATH" ]; then
+            echo "Error: failed to generate $APP_PATH"
+            exit 1
+          fi
+
+          rm -rf $BUILD_DIR/Debug-iphonesimulator/*.swiftmodule
+          rm -rf $BUILD_DIR/Debug-iphonesimulator/*.dSYM
+          rm -rf $BUILD_DIR/Debug-iphonesimulator/*.plist
+          rm -rf $BUILD_DIR/Debug-iphonesimulator/*.xcassets
+
+      - name: Upload iPhone 17 Pro Simulator App
+        uses: actions/upload-artifact@v4
+        with:
+          name: iosDemo-iPhone17Pro-Simulator
+          path: ./build/Debug-iphonesimulator/iosDemo.app
+          retention-days: 14

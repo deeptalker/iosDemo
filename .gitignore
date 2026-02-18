@@ -1,0 +1,56 @@
+OS 项目标准 .gitignore
+# 适配：Xcode 26.2 | Mac mini 4 (M4 arm64)
+# ==============================================
+
+# 1. Xcode 编译与缓存（必忽略）
+build/
+DerivedData/
+xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+*.moved-aside
+*.perspective
+*.perspectivev3
+*.xcuserstate
+
+# 2. 模拟器/真机构建产物
+*.app
+*.app.dSYM
+*.ipa
+*.xcarchive
+
+# 3. CocoaPods（最常用）
+Pods/
+Podfile.lock
+Manifest.lock
+
+# 4. Swift Package Manager 缓存
+.swiftpm/
+.build/
+
+# 5. 本地环境与密钥（一定要忽略）
+.env
+.local
+.env.*
+Secrets.swift
+Secrets.plist
+Config-Secret.plist
+
+# 6. Mac 系统垃圾文件
+.DS_Store
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+._*
+
+# 7. 日志与崩溃
+*.log
+*.crash
+
+# 8. 自动化/CI 临时文件
+artifacts/
+output/
+tmp/
