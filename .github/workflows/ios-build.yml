@@ -57,5 +57,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: iosDemo-iPhone17Pro-Simulator
-          path: ./build/Debug-iphonesimulator/iosDemo.app
+          path: ./build/Debug-iphonesimulator/
           retention-days: 14
